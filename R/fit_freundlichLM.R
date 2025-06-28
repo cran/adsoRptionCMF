@@ -82,7 +82,8 @@ fit_freundlichLM <- function(Ce, Qe, verbose = TRUE) {
   )
 
   # Equation label
-  equation <- bquote(log(Q[e]) == .(round(intercept, 3)) + frac(1, .(round(n, 3))) * log(C[e]))
+  equation_label <- paste0("log(Q[e]) == ", round(intercept, 3),
+                           " + frac(1,", round(n, 3), ") * log(C[e])")
 
   # Bootstrap for CI
   boot_fun <- function(data, indices) {
@@ -110,7 +111,7 @@ fit_freundlichLM <- function(Ce, Qe, verbose = TRUE) {
     ggplot2::geom_line(data = plot_data, ggplot2::aes(x = log_Ce, y = Fit), color = "red", linewidth = 1.2) +
     ggplot2::geom_ribbon(data = plot_data, ggplot2::aes(ymin = CI_lower, ymax = CI_upper), fill = "red", alpha = 0.2) +
     ggplot2::annotate("text", x = max(log_Ce) * 0.95, y = min(log_Qe) * 1.05,
-                      label = as.expression(equation), parse = TRUE, size = 5, hjust = 1) +
+                      label = equation_label, parse = TRUE, size = 5, hjust = 1) +
     ggplot2::labs(title = "Freundlich Isotherm Linear Model Fit",
                   x = "log(Ce)", y = "log(Qe)") +
     ggplot2::theme_minimal() +

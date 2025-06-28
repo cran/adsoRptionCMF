@@ -89,7 +89,7 @@ fit_langmuirNLM <- function(Ce, Qe) {
   Kl <- params["Kl"]
 
   # Equation annotation
-  equation <- bquote(Q[e] == .(round(Qmax, 3)) * frac(.(round(Kl, 3)) * C[e], 1 + .(round(Kl, 3)) * C[e]))
+  equation_label <- paste0("Q[e] == ", formatC(Qmax, digits = 3, format = "f"), " * (", formatC(Kl, digits = 3, format = "f"), " * C[e]) / (1 + ", formatC(Kl, digits = 3, format = "f"), " * C[e])")
 
   # Bootstrapped confidence intervals
   predict_fun <- function(formula, data, indices) {
@@ -118,7 +118,7 @@ fit_langmuirNLM <- function(Ce, Qe) {
     ggplot2::geom_line(data = plot_data, ggplot2::aes(x = Ce, y = Fit), color = "red", linewidth = 1.2) +
     ggplot2::geom_ribbon(data = plot_data, ggplot2::aes(ymin = CI_lower, ymax = CI_upper), alpha = 0.2, fill = "red") +
     ggplot2::annotate("text", x = max(data$Ce) * 0.95, y = min(data$Qe) * 1.05,
-                      label = as.expression(equation), parse = TRUE, size = 5, hjust = 1) +
+                      label = equation_label, parse = TRUE, size = 5, hjust = 1) +
     ggplot2::labs(title = "Langmuir Isotherm Non-linear Model Fit",
                   x = "Equilibrium Concentration (Ce)",
                   y = "Adsorbed Amount (Qe)") +

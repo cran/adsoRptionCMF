@@ -81,7 +81,7 @@ fit_freundlichNLM <- function(Ce, Qe) {
   KF <- params["KF"]
   n_val <- params["n"]
 
-  equation <- bquote(Q[e] == .(round(KF, 3)) * C[e]^frac(1, .(round(n_val, 3))))
+  equation_label <- paste0("Q[e] == ", formatC(KF, digits = 3, format = "f"), " * C[e]^(", "1 / ", formatC(n_val, digits = 3, format = "f"), ")")
 
   predict_fun <- function(formula, data, indices) {
     d <- data[indices, ]
@@ -108,7 +108,7 @@ fit_freundlichNLM <- function(Ce, Qe) {
     ggplot2::geom_line(data = plot_data, ggplot2::aes(x = Ce, y = Fit), color = "red", linewidth = 1.2) +
     ggplot2::geom_ribbon(data = plot_data, ggplot2::aes(ymin = CI_lower, ymax = CI_upper), alpha = 0.2, fill = "red") +
     ggplot2::annotate("text", x = max(data$Ce) * 0.95, y = min(data$Qe) * 1.05,
-             label = as.expression(equation), parse = TRUE, size = 5, hjust = 1) +
+             label = equation_label, parse = TRUE, size = 5, hjust = 1) +
     ggplot2::labs(title = "Freundlich Isotherm Non-linear Model Fit",
          x = "Equilibrium Concentration (Ce)",
          y = "Adsorbed Amount (Qe)") +

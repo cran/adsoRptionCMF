@@ -92,7 +92,7 @@ fit_temkinNLM <- function(Ce, Qe, Temp) {
   bT <- params["bT"]
 
   # Equation annotation
-  equation <- bquote(Q[e] == frac(.(round(R * Temp / bT, 3)) * log(.(round(AT, 3)) * C[e])))
+  equation_label <- paste0("Q[e] == ", formatC((R * Temp / bT), digits = 3, format = "f"), " * log(", formatC(AT, digits = 3, format = "f"), " * C[e])")
 
   # Bootstrapped confidence intervals
   predict_fun <- function(formula, data, indices) {
@@ -121,7 +121,7 @@ fit_temkinNLM <- function(Ce, Qe, Temp) {
     ggplot2::geom_line(data = plot_data, ggplot2::aes(x = Ce, y = Fit), color = "red", linewidth = 1.2) +
     ggplot2::geom_ribbon(data = plot_data, ggplot2::aes(ymin = CI_lower, ymax = CI_upper), alpha = 0.2, fill = "red") +
     ggplot2::annotate("text", x = max(data$Ce) * 0.95, y = min(data$Qe) * 1.05,
-                      label = as.expression(equation), parse = TRUE, size = 5, hjust = 1) +
+                      label = equation_label, parse = TRUE, size = 5, hjust = 1) +
     ggplot2::labs(title = "Temkin Isotherm Non-linear Model Fit",
                   x = "Equilibrium Concentration (Ce)",
                   y = "Adsorbed Amount (Qe)") +

@@ -83,7 +83,8 @@ fit_temkinLM <- function(Ce, Qe, Temp, verbose = TRUE) {
   )
 
   # Equation annotation
-  equation <- bquote(Q[e] == .(round(intercept, 3)) + .(round(slope, 3)) * ln(C[e]))
+  equation_label <- paste0(
+    "Q[e] == ", formatC(intercept, digits = 3, format = "f"), " + ", formatC(slope, digits = 3, format = "f"), " * ln(C[e])")
 
   # Bootstrapping for prediction interval
   boot_fun <- function(data, indices) {
@@ -111,7 +112,7 @@ fit_temkinLM <- function(Ce, Qe, Temp, verbose = TRUE) {
     ggplot2::geom_line(data = plot_data, ggplot2::aes(x = log_Ce, y = Fit), color = "red", linewidth = 1.2) +
     ggplot2::geom_ribbon(data = plot_data, ggplot2::aes(ymin = CI_lower, ymax = CI_upper), alpha = 0.2, fill = "red") +
     ggplot2::annotate("text", x = max(log_Ce) * 0.95, y = min(Qe) * 1.05,
-                      label = as.expression(equation), parse = TRUE, size = 5, hjust = 1) +
+                      label = equation_label, parse = TRUE, size = 5, hjust = 1) +
     ggplot2::labs(title = "Temkin Isotherm Linear Model Fit", x = "ln(Ce)", y = "Qe") +
     ggplot2::theme_minimal() +
     ggplot2::theme(

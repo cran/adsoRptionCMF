@@ -83,7 +83,7 @@ fit_langmuirLM3 <- function(Ce, Qe, verbose = TRUE) {
     )
 
     # Equation annotation
-    equation <- bquote(Q[e] == .(round(intercept, 3)) - frac(1, .(round(b, 3))) * frac(Q[e], C[e]))
+    equation_label <- paste0("Q[e] == ", formatC(intercept, digits = 3, format = "f"), " - frac(1, ", formatC(b, digits = 3, format = "f"), ") * frac(Q[e], C[e])")
 
     # Bootstrap for confidence intervals
     boot_fun <- function(data, indices) {
@@ -112,7 +112,7 @@ fit_langmuirLM3 <- function(Ce, Qe, verbose = TRUE) {
       ggplot2::geom_ribbon(data = plot_data, ggplot2::aes(ymin = CI_lower, ymax = CI_upper),
                            fill = "red", alpha = 0.2) +
       ggplot2::annotate("text", x = max(Qe_by_Ce) * 0.95, y = min(Qe) * 1.05,
-                        label = as.expression(equation), parse = TRUE, size = 5, hjust = 1) +
+                        label = equation_label, parse = TRUE, size = 5, hjust = 1) +
       ggplot2::labs(title = "Langmuir Isotherm Third Linear Model Fit (Qe vs. Qe/Ce)",
                     x = "Qe/Ce", y = "Qe") +
       ggplot2::theme_minimal() +

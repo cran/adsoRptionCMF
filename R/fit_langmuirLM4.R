@@ -83,7 +83,7 @@ fit_langmuirLM4 <- function(Ce, Qe, verbose = TRUE) {
   )
 
   # Equation annotation
-  equation <- bquote(frac(Q[e], C[e]) == .(round(intercept, 3)) - .(round(abs(slope), 3)) %.% Q[e])
+  equation_label <- paste0("frac(Q[e], C[e]) == ", formatC(intercept, digits = 3, format = "f"), " - ", formatC(abs(slope), digits = 3, format = "f"), " * Q[e]")
 
   # Bootstrap for confidence intervals
   boot_fun <- function(data, indices) {
@@ -112,7 +112,7 @@ fit_langmuirLM4 <- function(Ce, Qe, verbose = TRUE) {
     ggplot2::geom_ribbon(data = plot_data, ggplot2::aes(ymin = CI_lower, ymax = CI_upper),
                          fill = "red", alpha = 0.2) +
     ggplot2::annotate("text", x = max(Qe) * 0.95, y = min(Qe_by_Ce) * 1.05,
-                      label = as.expression(equation), parse = TRUE, size = 5, hjust = 1) +
+                      label = equation_label, parse = TRUE, size = 5, hjust = 1) +
     ggplot2::labs(title = "Langmuir Isotherm Fourth Linear Model Fit (Qe/Ce vs. Qe)",
                   x = "Qe", y = "Qe/Ce") +
     ggplot2::theme_minimal() +

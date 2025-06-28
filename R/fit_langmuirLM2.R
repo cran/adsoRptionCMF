@@ -84,7 +84,7 @@ fit_langmuirLM2 <- function(Ce, Qe, verbose = TRUE) {
   )
 
   # Equation annotation
-  equation <- bquote(frac(1, Q[e]) == .(round(intercept, 3)) + .(round(slope, 3)) * frac(1, C[e]))
+  equation_label <- paste0("frac(1, Q[e]) == ", formatC(intercept, digits = 3, format = "f"), ifelse(slope >= 0, " + ", " - "), formatC(abs(slope), digits = 3, format = "f"), " * frac(1, C[e])")
 
   # Bootstrap for confidence intervals
   boot_fun <- function(data, indices) {
@@ -113,7 +113,7 @@ fit_langmuirLM2 <- function(Ce, Qe, verbose = TRUE) {
     ggplot2::geom_ribbon(data = plot_data, ggplot2::aes(ymin = CI_lower, ymax = CI_upper),
                          fill = "red", alpha = 0.2) +
     ggplot2::annotate("text", x = max(inv_Ce) * 0.95, y = min(inv_Qe) * 1.05,
-                      label = as.expression(equation), parse = TRUE, size = 5, hjust = 1) +
+                      label = equation_label, parse = TRUE, size = 5, hjust = 1) +
     ggplot2::labs(title = "Langmuir Isotherm Second Linear Model Fit (1/Qe vs. 1/Ce)",
                   x = "1/Ce", y = "1/Qe") +
     ggplot2::theme_minimal() +
